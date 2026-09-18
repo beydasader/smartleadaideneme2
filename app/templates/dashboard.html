@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Lead Yönetim Paneli</title>
+
+</head>
+
+<body>
+
+    <h1>Lead Yönetim Paneli</h1>
+
+    <div id="leadler"></div>
+
+
+    <script>
+
+        async function leadleriGetir() {
+
+            const response =
+                await fetch("/api/leads");
+
+            const data =
+                await response.json();
+
+            const alan =
+                document.getElementById("leadler");
+
+            alan.innerHTML = "";
+
+
+            if (!data.basari) {
+
+                alan.innerText = data.hata;
+
+                return;
+
+            }
+
+
+            data.leadler.forEach(function (lead) {
+
+                const div =
+                    document.createElement("div");
+
+                div.innerHTML = `
+                    <hr>
+                    <p><strong>İsim:</strong>
+                    ${lead.isim}</p>
+
+                    <p><strong>Telefon:</strong>
+                    ${lead.telefon}</p>
+
+                    <p><strong>Mesaj:</strong>
+                    ${lead.mesaj}</p>
+
+                    <p><strong>Tarih:</strong>
+                    ${lead.tarih}</p>
+                `;
+
+                alan.appendChild(div);
+
+            });
+
+        }
+
+
+        leadleriGetir();
+
+    </script>
+
+</body>
+
+</html>

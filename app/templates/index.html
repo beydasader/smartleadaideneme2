@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>SmartLead AI</title>
+
+</head>
+
+<body>
+
+    <h1>SmartLead AI</h1>
+
+    <h2>Yapay Zeka Asistanımıza Hoş Geldiniz</h2>
+
+    <div>
+
+        <input
+            id="mesaj"
+            type="text"
+            placeholder="Mesajınızı yazın"
+        >
+
+        <button id="sorButonu">
+            Sor
+        </button>
+
+    </div>
+
+    <div id="cevap"></div>
+
+
+    <hr>
+
+
+    <h2>İletişim Bilgileriniz</h2>
+
+    <input
+        id="isim"
+        type="text"
+        placeholder="Adınız"
+    >
+
+    <input
+        id="telefon"
+        type="text"
+        placeholder="Telefonunuz"
+    >
+
+    <button id="kaydetButonu">
+        Bilgilerimi Kaydet
+    </button>
+
+
+    <script>
+
+        document
+            .getElementById("sorButonu")
+            .addEventListener("click", async function () {
+
+                const mesaj =
+                    document.getElementById("mesaj").value;
+
+                const response =
+                    await fetch("/api/sohbet", {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            mesaj: mesaj
+                        })
+
+                    });
+
+                const data =
+                    await response.json();
+
+                document.getElementById("cevap")
+                    .innerText =
+                    data.cevap || data.hata;
+
+            });
+
+
+        document
+            .getElementById("kaydetButonu")
+            .addEventListener("click", async function () {
+
+                const isim =
+                    document.getElementById("isim").value;
+
+                const telefon =
+                    document.getElementById("telefon").value;
+
+                const mesaj =
+                    document.getElementById("mesaj").value;
+
+
+                const response =
+                    await fetch("/api/leads", {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            isim: isim,
+                            telefon: telefon,
+                            mesaj: mesaj
+                        })
+
+                    });
+
+
+                const data =
+                    await response.json();
+
+                alert(
+                    data.mesaj || data.hata
+                );
+
+            });
+
+    </script>
+
+</body>
+
+</html>
