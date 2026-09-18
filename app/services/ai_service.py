@@ -41,7 +41,6 @@ class AIService:
         )
 
         try:
-
             response = requests.post(
                 "https://api.groq.com/openai/v1/chat/completions",
                 headers={
@@ -49,7 +48,7 @@ class AIService:
                     "Content-Type": "application/json"
                 },
                 json={
-                    "model": ""model": "openai/gpt-oss-20b",
+                    "model": "openai/gpt-oss-20b",
                     "messages": messages
                 },
                 timeout=30
