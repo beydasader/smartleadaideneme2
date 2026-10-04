@@ -1,44 +1,28 @@
 import requests
 from flask import current_app
 
-
 class AIServiceError(Exception):
     pass
-
 
 class AIService:
 
     def _system_prompt(self):
-        return current_app.config["BUSINESS_CONTEXT"]
+        # Eğer context bulunamazsa hata vermemesi için varsayılan metin eklendi
+        return current_app.config.get("BUSINESS_CONTEXT", "Sen yardımsever bir asistansın.")
 
     def yanit_uret(self, mesaj, gecmis=None):
-
-        api_key = current_app.config["GROQ_API_KEY"]
+        # KeyError almamak için .get() kullanıldı
+        api_key = current_app.config.get("GROQ_API_KEY")
 
         if not api_key:
-            return (
-                "Demo modu: Groq API anahtarı "
-                "henüz ayarlanmamış."
-            )
+            return "Demo modu: Groq API anahtarı henüz ayarlanmamış."
 
         if gecmis is None:
             gecmis = []
 
-        messages = [
-            {
-                "role": "system",
-                "content": self._system_prompt()
-            }
-        ]
-
+        messages = [{"role": "system", "content": self._system_prompt()}]
         messages.extend(gecmis)
-
-        messages.append(
-            {
-                "role": "user",
-                "content": mesaj
-            }
-        )
+        messages.append({"role": "user", "content": mesaj})
 
         try:
             response = requests.post(
@@ -48,25 +32,21 @@ class AIService:
                     "Content-Type": "application/json"
                 },
                 json={
-                    "model": "openai/gpt-oss-20b",
+                    "model": "llama3-70b-8192",  # Geçerli Groq Modeli
                     "messages": messages
                 },
                 timeout=30
             )
 
             if response.status_code != 200:
-                raise AIServiceError(
-                    "Yapay zeka servisine ulaşılamadı."
-                )
+                raise AIServiceError(f"Groq API Hatası: {response.text}")
 
             data = response.json()
-
             return data["choices"][0]["message"]["content"]
 
         except requests.RequestException as error:
-            raise AIServiceError(
-                "Yapay zeka bağlantısında hata oluştu."
-            ) from error
-
+            raise AIServiceError(f"API Bağlantı hatası: {str(error)}")
+        except Exception as e:
+            raise AIServiceError(f"Sistem hatası: {str(e)}")
 
 ai_service = AIService()

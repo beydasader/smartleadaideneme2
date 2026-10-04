@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, render_template, request
 from app.database import lead_ekle, tum_leadler
-from app.services.ai_service import AIServiceError, ai_service
+from app.services.ai_service import ai_service
 
 pages = Blueprint("pages", __name__)
 api = Blueprint("api", __name__)
@@ -21,8 +21,9 @@ def sohbet():
     try:
         cevap = ai_service.yanit_uret(data["mesaj"], data.get("gecmis", []))
         return jsonify({"basari": True, "cevap": cevap}), 200
-    except AIServiceError:
-        return jsonify({"basari": False, "hata": "Yapay zeka şu anda kullanılamıyor."}), 503
+    except Exception as hata:
+        # Hatanın gerçek sebebini Wix'e gönderecek kısım
+        return jsonify({"basari": False, "hata": str(hata)}), 500
 
 @api.route("/leads", methods=["POST"])
 def lead_kaydet():
@@ -41,7 +42,6 @@ def lead_kaydet():
         lead_ekle(isim, email, mesaj)
         return jsonify({"basari": True, "mesaj": "Kayıt başarıyla oluşturuldu."}), 201
     except Exception as hata:
-        print("LEAD KAYIT HATASI:", hata)
         return jsonify({"basari": False, "hata": "Kayıt sırasında hata oluştu."}), 500
 
 @api.route("/leads", methods=["GET"])
@@ -59,7 +59,5 @@ def leadleri_getir():
             })
         return jsonify({"basari": True, "leadler": liste}), 200
     except Exception as hata:
-        print("LEAD GET HATASI:", hata)
         return jsonify({"basari": False, "hata": "Lead kayıtları alınamadı."}), 500
-
 
