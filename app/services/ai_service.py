@@ -7,11 +7,9 @@ class AIServiceError(Exception):
 class AIService:
 
     def _system_prompt(self):
-        # Eğer context bulunamazsa hata vermemesi için varsayılan metin eklendi
         return current_app.config.get("BUSINESS_CONTEXT", "Sen yardımsever bir asistansın.")
 
     def yanit_uret(self, mesaj, gecmis=None):
-        # KeyError almamak için .get() kullanıldı
         api_key = current_app.config.get("GROQ_API_KEY")
 
         if not api_key:
@@ -32,7 +30,7 @@ class AIService:
                     "Content-Type": "application/json"
                 },
                 json={
-                    "model": "llama3-70b-8192",  # Geçerli Groq Modeli
+                    "model": "llama-3.1-70b-versatile",  # GÜNCEL ÇALIŞAN MODEL BURAYA EKLENDİ
                     "messages": messages
                 },
                 timeout=30
