@@ -30,7 +30,7 @@ class AIService:
                     "Content-Type": "application/json"
                 },
                 json={
-                    "model": "llama-3.1-70b-versatile",  
+                    "model": "llama-3.1-8b-instant",  
                     "messages": messages
                 },
                 timeout=30
