@@ -30,7 +30,7 @@ class AIService:
                     "Content-Type": "application/json"
                 },
                 json={
-                    "model": "llama-3.1-70b-versatile",  # GÜNCEL ÇALIŞAN MODEL BURAYA EKLENDİ
+                    "model": "llama-3.1-70b-versatile",  
                     "messages": messages
                 },
                 timeout=30
