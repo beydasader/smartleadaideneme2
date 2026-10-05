@@ -7,7 +7,7 @@ class AIServiceError(Exception):
 class AIService:
 
     def _system_prompt(self):
-        return current_app.config.get("BUSINESS_CONTEXT", "Sen yardımsever bir asistansın.")
+        return current_app.config.get("BUSINESS_CONTEXT", "Sen mumu.co markasının yardımsever bir asistansın , samimi ama açıklayıcı konuş çok uzun açıklamalar yerine net kısa ve güzel açıkla .")
 
     def yanit_uret(self, mesaj, gecmis=None):
         api_key = current_app.config.get("GROQ_API_KEY")
