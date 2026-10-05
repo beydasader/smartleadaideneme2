@@ -30,7 +30,7 @@ class AIService:
                     "Content-Type": "application/json"
                 },
                 json={
-                    "model": "llama-3.1-8b-instant",  
+                    "model": "openai/gpt-oss-120b",  
                     "messages": messages
                 },
                 timeout=30
